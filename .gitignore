@@ -1,0 +1,16 @@
+.DS_Store
+Thumbs.db
+node_modules/
+dist/
+build/
+.cache/
+*.log
+.env
+.env.*
+!.env.example
+.vscode/
+!.vscode/extensions.json
+.idea/
+coverage/
+
+_to_delete/
