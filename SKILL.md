@@ -27,7 +27,7 @@ Make these first, in this order, and state each one with its reason.
 
 **2. Which two typefaces, and why each?** Two maximum. Not Inter, not Space Grotesk, not Roboto. Not because they are bad (Inter is excellent) but because they have become the signature of a choice that was not made. Everything else is open, so long as you can say in one sentence what each face is doing here, at the sizes it actually has to work at.
 
-**3. What does the content actually demand?** Count the real things. If there are four features, show four, not three padded or six invented. If one matters more than the others, make it bigger and put it first. Let the content set the structure instead of pouring it into a hero-then-three-cards template.
+**3. What does the content actually demand?** Count the real things. If there are four features, show four, not three padded or six invented. If one matters more than the others, make it bigger and put it first. Let the content set the structure instead of pouring it into a hero-then-three-cards template. Padding a thin section with explanatory prose is the same failure as inventing a sixth feature, so if there is not much to say, build a smaller thing.
 
 **4. What is the one specific, checkable claim?** Write one true sentence about what the thing does, with a number or a mechanism in it. "Turns a Postgres query into a shareable dashboard in about a minute" beats "Unlock the power of your data" every time, because specificity is what a model cannot fabricate. If you do not know the specifics, ask, or say plainly that the copy is placeholder.
 
@@ -37,13 +37,15 @@ Full reasoning and the complete lists live in the reference files. Read the rele
 
 **Color** (`references/visual.md`): no indigo or violet accent, no purple-to-blue or purple-to-cyan gradient anywhere, no glassmorphism, no colored glow behind cards or buttons, no dark mode as a silent default. Shadows stay neutral.
 
-**Typography** (`references/visual.md`): no single italic serif word inside a sans headline, no all-caps eyebrow label above a heading, no monospace body copy on a page that is not about code. Build hierarchy from position, weight, color, and spacing before you reach for size. Hierarchy that is only size is not hierarchy.
+**Typography** (`references/visual.md`): no single italic serif word inside a sans headline, no eyebrow label above a heading unless it carries information the heading does not, no monospace body copy on a page that is not about code. Build hierarchy from position, weight, color, and spacing before you reach for size. Hierarchy that is only size is not hierarchy.
 
 **Layout** (`references/visual.md`): no centered hero with a pill badge above the H1, no row of three or six identical icon-on-top cards, no colored left borders, no numbered 1-2-3 explainer, no stat banner of round numbers, no emoji as icons. Something in the composition must be deliberately asymmetric. Uniform spacing communicates no grouping; the gap inside a group has to be visibly smaller than the gap to the next group, by a full step.
 
 **Imagery** (`references/visual.md`): no laughing-team stock photos, no floating 3D blobs, no AI-generated people. Real screenshots, real photographs, or honest diagrams. If there is nothing real to show, say less rather than filling the space.
 
 **Copy** (`references/copy.md`): this is where the tell is loudest and the part most often shipped unedited. No em dashes, anywhere, including UI strings and docs. No spaced en dashes either. The banned vocabulary and headline patterns are in the reference file; read it before writing any user-facing text. Vary sentence length.
+
+**Restraint** (`references/copy.md`): the interface does not explain itself. No paragraph under a heading that restates the heading, no page-intro telling people what page they are on, no "Here you can", no welcome banner, no helper text repeating the field label, no prose explaining what a button does, no trailing "you can change this at any time". Run the deletion test before you present: strip every paragraph that is not a heading, a label, or a control, and keep back only the ones whose absence a reader would feel. Text is not the fix for a section that looks empty; composition is.
 
 **Craft** (`references/craft.md`): the states nobody generated because nobody asked. Focus, hover, active, disabled, empty, loading, error. Semantic markup. Verified contrast. Behavior at 320, 768, 1440, 2560. A design missing any of these is not finished no matter how good the happy path looks.
 
@@ -54,9 +56,9 @@ python3 scripts/audit.py path/to/src            # whole tree
 python3 scripts/audit.py index.html --json      # machine-readable
 ```
 
-No dependencies, Python 3.8 and up. It catches the mechanical tells: em dashes, banned vocabulary, banned headline patterns, AI-default hues in hex values, banned typefaces, colored glows, glassmorphism, emoji icons, suppressed focus outlines, placeholder testimonial names, missing alt text. Exit code 1 when anything hard fails.
+No dependencies, Python 3.8 and up. It catches the mechanical tells: em dashes, banned vocabulary, banned headline patterns, explanatory filler, eyebrow labels and the uppercase-plus-letter-spacing recipe, AI-default hues in hex values, banned typefaces, colored glows, glassmorphism, emoji icons, suppressed focus outlines, placeholder testimonial names, missing alt text. Exit code 1 when anything hard fails.
 
-It cannot see whether the layout is symmetric, whether the copy is specific, or whether empty and error states exist. Those are in `references/audit-checklist.md` and you have to actually look. When you report the result, say which checks you ran by tool and which by hand. An unverified check is a failure, not a pass.
+It cannot see whether the layout is symmetric, whether the copy is specific, whether a given paragraph earns its place, or whether empty and error states exist. Those are in `references/audit-checklist.md` and you have to actually look. When you report the result, say which checks you ran by tool and which by hand. An unverified check is a failure, not a pass.
 
 ## When a rule blocks you
 

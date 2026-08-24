@@ -99,6 +99,69 @@ source ("the fastest", "the most powerful").
 
 ---
 
+## Explanatory filler
+
+The second-loudest tell after em dashes, and the one that survives every visual
+fix. A model narrates the interface because narrating is cheap, and because
+prose fills space that composition would otherwise have to fill. The result is
+a page explaining itself to somebody who is already looking at it.
+
+### Never ship
+
+- **A subhead under every heading that restates the heading.** "Settings /
+  Manage your account settings and preferences."
+- **A page-intro paragraph** explaining what the page is for, to a person who
+  navigated there on purpose.
+- **"Here you can", "In this section", "Use this page to", "This dashboard
+  allows you to".** The interface talking about itself in the third person.
+- **A welcome banner.** "Welcome to Analytics! Here you can track metrics,
+  monitor performance, and share reports with your team."
+- **Helper text under a field that needs none.** "Email address / Enter your
+  email address."
+- **A description under every card title** that restates the title at greater
+  length.
+- **A tooltip on an obvious control.** A tooltip reading "Save" on the Save
+  button.
+- **Prose explaining an affordance.** "Click the button below to get started."
+  If a control needs a sentence, the control's label is wrong.
+- **The trailing reassurance.** "You can change this at any time." "Don't
+  worry, we'll never share your email." Appended everywhere, carrying nothing.
+- **Three sentences in an empty state where one works.**
+- **A closing paragraph that summarizes the section directly above it.**
+
+### The deletion test
+
+Read the page with every paragraph removed that is not a heading, a label, or a
+control. If a reader can still tell what the thing is and still complete the
+task, those paragraphs were filler and they go.
+
+Then take each sentence you kept and ask what a reader can do after reading it
+that they could not do before. No answer means delete it.
+
+### Instead
+
+A heading plus its content is the explanation. Do not put a sentence between
+them saying what the section is.
+
+Helper text earns its place only when it carries something the label cannot: a
+format constraint ("MM/YY"), a consequence ("Visible to everyone in the
+workspace"), a non-obvious rule ("Minimum 12 characters"). Reassurance is not
+information.
+
+In an application interface, budget one sentence of body copy per view and
+spend it on the thing the user cannot infer. Marketing pages get more room, but
+every paragraph has to carry a fact rather than a mood.
+
+Empty space is not a problem that text solves. An empty, confident section
+beats a filled, generic one. If a region looks bare, the fix is composition:
+change the proportions, cut the section, or find something real to put there.
+
+Where an explanation genuinely is needed, put it where it is needed. Inline at
+the point of confusion, or behind a "Why?" control. Not as a preamble everyone
+reads and nobody needed.
+
+---
+
 ## What to do instead
 
 Write one specific, true, checkable sentence about what the thing does.
@@ -132,3 +195,7 @@ Loading states name what is loading when it will take more than a moment.
 
 Confirmations name the thing and the consequence: "Delete 3 drafts? This cannot
 be undone."
+
+Say it once. If the button label, the field label, and the helper text are all
+carrying the same sentence, two of them are filler. See the explanatory-filler
+section above.

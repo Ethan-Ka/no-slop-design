@@ -60,8 +60,8 @@ signature of a choice that was not made. Everything else is open.
   from habit, and that is what readers pick up on.
 - **A single italic serif word dropped into a sans headline.** "Build *better*
   software."
-- **All-caps eyebrow labels** above section headings, especially with a
-  decorative dot or a trailing rule.
+- **Eyebrow labels above section headings.** Banned by default; the full
+  treatment is below.
 - **Monospace body copy** on a page that is not about code.
 - **Type hierarchy that is only size.** If the only difference between a
   heading and body text is that one is bigger, there is no hierarchy.
@@ -86,6 +86,38 @@ Consider a base size other than 16px. 16px is a browser default, not a
 decision. Cap body measure around 65 to 70 characters; longer lines lose the
 reader on the return sweep.
 
+
+### Eyebrows
+
+The small label above a heading. Banned by default, and worth its own entry
+because it is the most common piece of pure decoration in generated design.
+
+The recipe, which is worth learning to spot: 11 or 12px, all caps, wide
+letter-spacing, semibold, in the accent color, sometimes with a leading dot, a
+trailing rule, or a pill border. It sits above the heading of every section,
+and it almost always says the thing the heading is about to say.
+
+Banned outright:
+
+- **An eyebrow that restates its heading.** "FEATURES" above "Everything you
+  need".
+- **An eyebrow naming the category the page is already about.** "PRICING" above
+  "Simple, transparent pricing".
+- **The pill badge above an H1.** The same pattern wearing a border.
+- **Decorative chrome on an eyebrow:** leading dot, trailing rule, gradient
+  text, sparkle icon.
+- **An eyebrow on every section**, which is the giveaway that none of them was
+  a decision.
+
+An eyebrow is legitimate only when it carries information the heading does not
+and the reader needs right then: a category in a list of genuinely mixed
+categories, a date on an article, a step number in a sequence the reader is
+moving through. When it is doing that job, it does not need to be all-caps,
+letter-spaced, and accent-colored to do it.
+
+If you want a heading to feel anchored, anchor it with position, spacing, or a
+rule that belongs to the layout. Not with a word that repeats the heading.
+
 ---
 
 ## Layout
@@ -106,6 +138,10 @@ reader on the return sweep.
   breaking the grid.
 - **Whitespace so uniform and so generous** that the page reads as unfinished
   rather than composed.
+- **Text used to fill space that composition should fill.** A paragraph added
+  under a heading because the area looked empty, a description under every card
+  because the cards were short. It reads as a copy problem and it is a layout
+  problem. See the explanatory-filler section in `references/copy.md`.
 - **One global fade-in on scroll** applied to every element, or bounce-on-hover
   applied to everything clickable.
 

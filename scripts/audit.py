@@ -2,9 +2,9 @@
 """Automated pass of the anti-slop audit.
 
 Catches the mechanical tells: em dashes, banned vocabulary, banned headline
-patterns, AI-default hues, banned typefaces, glows, glassmorphism, emoji
-icons, suppressed focus outlines, placeholder testimonial names, round-number
-stat banners, missing alt text.
+patterns, explanatory filler, eyebrow labels, AI-default hues, banned
+typefaces, glows, glassmorphism, emoji icons, suppressed focus outlines,
+placeholder testimonial names, round-number stat banners, missing alt text.
 
 It does not catch the judgment items (is the layout symmetric, is the copy
 specific, do empty and error states exist). Those stay on the human checklist
@@ -59,6 +59,40 @@ BANNED_PATTERNS = [
     (r"\bmay potentially\b|\bcould possibly help to\b", "stacked hedging"),
     (r"\btake your .{2,30} to the next level\b", "cliche: 'to the next level'"),
 ]
+
+# Text where the interface explains itself to somebody already looking at it.
+# The single most common filler in generated UI, and the one that survives
+# every visual fix.
+FILLER_PATTERNS = [
+    (r"\bhere you can\b", "filler: 'Here you can'", "fail"),
+    (r"\bin this section\b", "filler: 'In this section'", "fail"),
+    (r"\bthis (page|section|dashboard|view|panel|screen|tab) (lets|allows|helps|enables) you\b",
+     "filler: the interface narrating itself", "fail"),
+    (r"\buse this (page|section|form|tool|dashboard|view) to\b",
+     "filler: 'Use this page to'", "fail"),
+    (r"\bwelcome to (your |the |our )?[\w' ]{2,30}[!.]", "filler: welcome banner", "fail"),
+    (r"\bclick (the )?(button |link )?below\b", "filler: affordance explained in prose", "fail"),
+    (r"\bget started by\b", "filler: 'Get started by'", "fail"),
+    (r"\byou can (change|update|edit|adjust) (this|these|it) at any time\b",
+     "filler: trailing reassurance", "fail"),
+    (r"\bwe'?ll never (share|sell|spam)\b|\bdon'?t worry\b",
+     "filler: trailing reassurance", "fail"),
+    (r"\bmanage your \w+ (settings|preferences|account|profile)\b",
+     "filler: subhead restating its heading", "fail"),
+    (r"\beverything you need to\b", "filler: catch-all subhead", "fail"),
+    (r"\blearn more about how\b", "filler: 'Learn more about how'", "warn"),
+    (r"\benter your (email|name|password|address|phone)\b",
+     "filler: helper text restating the field label", "warn"),
+    (r"\bsimply\b|\bjust\b(?= click| enter| add| select)",
+     "filler: 'simply' / 'just' minimising a step", "warn"),
+]
+
+# Eyebrows: the small all-caps label above a heading. Structural guesses, so
+# these report as warnings and need eyes on the rendered page to confirm.
+EYEBROW_CLASS = re.compile(
+    r"\b(eyebrow|kicker|overline|pre-?title|supertitle|section-label)\b", re.I)
+EYEBROW_MARKUP = re.compile(
+    r"<(p|span|div)\b[^>]*>\s*([A-Z][A-Z0-9 &/'\-]{2,28})\s*</\1>\s*<h[1-3]\b")
 
 BANNED_FONTS = ["Inter", "Space Grotesk", "Roboto"]
 
@@ -146,6 +180,14 @@ def scan(path, approved=None):
         for rx, label in BANNED_PATTERNS:
             if re.search(rx, low):
                 add(i, "copy", label, line)
+        for rx, label, sev in FILLER_PATTERNS:
+            if re.search(rx, low):
+                add(i, "copy", label, line, sev)
+
+        if EYEBROW_CLASS.search(line):
+            add(i, "type", "eyebrow / kicker element", line, "warn")
+        if "uppercase" in low and ("letter-spacing" in low or "tracking-" in low):
+            add(i, "type", "eyebrow recipe: uppercase plus letter-spacing", line, "warn")
         for rx, label in ROUND_STATS:
             if re.search(rx, line):
                 add(i, "copy", label, line, "warn")
@@ -200,6 +242,15 @@ def scan(path, approved=None):
         if re.search(r"<img\b", low) and "alt=" not in low:
             add(i, "craft", "img without alt", line)
 
+    # Markup-level: a short all-caps element immediately before a heading.
+    # Spans lines, so it runs over the whole document rather than per line.
+    doc = "\n".join(lines)
+    for m in EYEBROW_MARKUP.finditer(doc):
+        line_no = doc.count("\n", 0, m.start()) + 1
+        add(line_no, "type",
+            "eyebrow label above a heading: " + m.group(2).strip(),
+            lines[line_no - 1] if line_no <= len(lines) else "", "warn")
+
     return hits
 
 
@@ -240,6 +291,8 @@ def main():
         print(
             "\nMechanical checks only. The judgment items (asymmetry, specific claims,"
             "\nempty / loading / error states, verified contrast) still need a human pass."
+            "\nThe deletion test is one of them: strip every paragraph that is not a"
+            "\nheading, a label, or a control, and see what the reader actually loses."
         )
 
     hard = [h for h in hits if h["severity"] == "fail" or args.strict]

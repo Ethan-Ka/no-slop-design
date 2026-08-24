@@ -19,6 +19,12 @@ a failure, not a pass.
 - [ ] At least one specific, checkable claim appears
 - [ ] Sentence lengths vary
 - [ ] Button labels name outcomes, errors say what to do
+- [ ] No explanatory filler: no "Here you can", no page-intro paragraph, no
+      subhead restating its heading, no welcome banner (auto, partial)
+- [ ] Deletion test run: every paragraph that is not a heading, a label, or a
+      control was checked for what it lets the reader do
+- [ ] Helper text carries a constraint, a consequence, or a rule, never
+      reassurance or a restatement of the field label
 
 ## Color
 
@@ -35,7 +41,9 @@ a failure, not a pass.
 - [ ] Body typeface is not Inter, Space Grotesk, or Roboto (auto)
 - [ ] Two families maximum, each with a stated reason for this design
 - [ ] No single italic serif word inside a sans headline
-- [ ] No all-caps eyebrow label above a heading
+- [ ] No eyebrow above a heading, unless it carries information the heading
+      does not (auto, partial)
+- [ ] No eyebrow chrome: leading dot, trailing rule, gradient text
 - [ ] Body copy is not monospace (auto, partial)
 - [ ] Hierarchy uses more than size
 
