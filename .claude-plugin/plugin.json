@@ -1,0 +1,9 @@
+{
+  "name": "no-slop-design",
+  "description": "Keeps generated interfaces and copy from reading as AI output.",
+  "version": "1.0.0",
+  "author": { "name": "Ethan-Ka" },
+  "license": "MIT",
+  "repository": "https://github.com/Ethan-Ka/no-slop-design",
+  "skills": ["./"]
+}

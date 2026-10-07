@@ -32,36 +32,40 @@ The skill is the folder: `SKILL.md`, `references/`, and `scripts/`.
 
 ### Claude Code
 
-Personal install, available in every project:
+As a plugin, from inside Claude Code:
 
-```bash
-git clone https://github.com/Ethan-Ka/no-slop-design.git
-mkdir -p ~/.claude/skills/no-slop-design
-rsync -a no-slop-design/SKILL.md no-slop-design/references no-slop-design/scripts \
-  ~/.claude/skills/no-slop-design/
+```
+/plugin marketplace add Ethan-Ka/no-slop-design
+/plugin install no-slop-design@no-slop-design
 ```
 
-Per-project install: copy the same three items into
-`<your-project>/.claude/skills/no-slop-design/` instead.
+Update later with `/plugin marketplace update no-slop-design`.
+
+Or as a plain skill, one line in the shell, available in every project:
+
+```bash
+git clone https://github.com/Ethan-Ka/no-slop-design.git ~/.claude/skills/no-slop-design
+```
+
+Per-project install: clone into `<your-project>/.claude/skills/no-slop-design`
+instead. Update with `git -C ~/.claude/skills/no-slop-design pull`.
 
 Restart Claude Code, or start a new session. The skill loads on its own when you
 ask for UI or copy work, and you can call it directly with `/no-slop-design`.
 
-### Updating
-
-Pull, then run the same `rsync` again. `--delete` is worth adding so files
-removed from the repo are removed from the install:
-
-```bash
-cd no-slop-design && git pull
-rsync -a --delete SKILL.md references scripts ~/.claude/skills/no-slop-design/
-```
-
 ### Claude.ai and other agents
 
-Zip the folder contents as `no-slop-design.skill` (a zip with `SKILL.md` at the
-top level) and upload it under Settings, Capabilities, Skills. For agents
-without skill support, point them at `SKILL.md`.
+Upload `dist/no-slop-design.skill` under Settings, Capabilities, Skills. For
+agents without skill support, point them at `SKILL.md`.
+
+Rebuild the package after any change to the skill:
+
+```bash
+mkdir -p /tmp/pkg/no-slop-design
+cp -R SKILL.md references scripts /tmp/pkg/no-slop-design/
+rm -f dist/no-slop-design.skill
+(cd /tmp/pkg && zip -qr "$OLDPWD/dist/no-slop-design.skill" no-slop-design)
+```
 
 ### Check it worked
 

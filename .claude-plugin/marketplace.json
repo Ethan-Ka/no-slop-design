@@ -1,0 +1,12 @@
+{
+  "name": "no-slop-design",
+  "owner": { "name": "Ethan-Ka" },
+  "description": "Skills that keep generated interfaces and copy from reading as AI output.",
+  "plugins": [
+    {
+      "name": "no-slop-design",
+      "source": "./",
+      "description": "Keeps generated interfaces and copy from reading as AI output."
+    }
+  ]
+}
