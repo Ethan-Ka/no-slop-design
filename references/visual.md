@@ -296,6 +296,16 @@ behind it.
 
 ---
 
+**Text glyphs standing in for icons.** `✓ ✗ → ← ↑ ↓ ×` set as characters in
+buttons, rows and result lists. They render at different weights and baselines
+in every font and look unfinished beside real icons. Use inline SVG drawn in
+the same stroke as the rest of the UI.
+
+**Status that duplicates a control.** A dot and the word "Learning" on a page
+whose on/off toggle lives elsewhere, or a "Virtual" pill on a card whose label
+already says so. If another control already shows the state, delete the
+indicator.
+
 ### Badges, pills, and micro-labels
 
 **Never ship**
@@ -309,6 +319,9 @@ behind it.
 - **Pills laid over images.** `Brand · 02`, `PLATE · BRAND`, `Field notes` as
   an absolutely positioned span on a photo. Let the image carry itself, or put
   a real caption underneath it.
+- **A bordered, tinted, uppercase-tracked pill for a plain fact.** "BETA" in
+  accent blue becomes plain muted "Beta" text. A pill needs a reason to be a
+  pill.
 - **A pill that duplicates its container.** A `Pricing` chip inside the pricing
   section.
 

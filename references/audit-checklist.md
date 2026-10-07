@@ -67,6 +67,11 @@ a failure, not a pass.
 - [ ] Eyebrows counted: at most one per three sections, never two in a row
       (auto, partial)
 - [ ] Body copy is not monospace (auto, partial)
+- [ ] No text glyphs (check, cross, arrows) standing in for icons (auto, partial)
+- [ ] No status indicator duplicating a control that already shows the state
+- [ ] No stock sentence repeated across empty states
+- [ ] After an automated sweep: diffs reviewed for facts made false or invented,
+      counts verified against git, tests run (see cleanup-pass.md)
 - [ ] Hierarchy uses more than size
 - [ ] No gradient-filled headline text (auto)
 - [ ] The display headline is a few words, not a whole sentence; tracking is

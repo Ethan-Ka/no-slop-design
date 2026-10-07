@@ -26,6 +26,10 @@ without them is the failure this list exists to catch.
 
 Components that display data add two more: **empty** and **partial**.
 
+In a repeated list, every item carries the same spacing. One card missing the
+bottom margin its siblings have will touch the next card. An icon in a form
+row is sized to the control beside it, not scaled down inside a larger box.
+
 ---
 
 ## Component rules

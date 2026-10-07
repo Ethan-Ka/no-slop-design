@@ -22,6 +22,7 @@ and on work that has no design system at all.
 | `references/visual.md` | Color, type, layout, decoration, and imagery, with the reason behind each rule |
 | `references/copy.md` | The em dash rule, banned vocabulary, headline patterns, microcopy |
 | `references/craft.md` | The seven states, component rules, motion nobody watched, when to reach for a real library, WCAG 2.2 AA baseline |
+| `references/cleanup-pass.md` | Removing slop from existing work: worked before/after cases, what to leave alone, how automated sweeps go wrong |
 | `references/audit-checklist.md` | The gate. Two failures means the work goes back. |
 | `scripts/audit.py` | The mechanical half of the audit. No dependencies. |
 

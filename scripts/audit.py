@@ -62,6 +62,9 @@ SOFT_WORDS_EXTRA = [
 ]
 # These are only tells in figurative use, so they are reported separately as
 # soft hits rather than hard failures.
+GLYPH_ICON = re.compile(r">[^<>]*[✓✔✗✘✕✖→←↑↓][^<>]*<")
+MINIMISER = re.compile(r"\b(simply|just) (connect|click|add|enter|sign|upload|create|install|set)\b", re.I)
+
 SOFT_WORDS = ["leverage", "navigate", "landscape", "journey", "ecosystem"]
 
 BANNED_PATTERNS = [
@@ -412,6 +415,10 @@ def scan(path, approved=None):
         if re.search(r"border-l(eft)?(-\d)?\s*:\s*\d+px", low) or re.search(
                 r'"[^"]*\bborder-l-\d', low):
             add(i, "layout", "colored left border on a card", line, "warn")
+        if GLYPH_ICON.search(line):
+            add(i, "layout", "text glyph standing in for an icon", line, "warn")
+        if MINIMISER.search(line):
+            add(i, "copy", "minimiser: simply / just + verb", line, "warn")
         if EMOJI.search(line) and re.search(r"<(span|div|li|p|h\d)|icon|className", line):
             add(i, "layout", "emoji standing in for an icon", line)
         if re.search(r"outline\s*:\s*(none|0)", low) and "focus-visible" not in low:

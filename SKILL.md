@@ -55,6 +55,8 @@ Full reasoning and the complete lists live in the reference files. Read the rele
 
 **Craft** (`references/craft.md`): the states nobody generated because nobody asked. Focus, hover, active, disabled, empty, loading, error. Semantic markup. Verified contrast. Behavior at 320, 768, 1440, 2560. One primary action per view, never twin buttons of equal weight. Then actually run it: a wobbling spinner, a dead hover, and a border that dies at the corner are not failures of taste but of nobody ever looking at the rendered result, which is the one defect class unique to generated work.
 
+**Cleanup** (`references/cleanup-pass.md`): when the job is removing slop from work that already exists. Worked before/after cases for every category above, the empty-state rules, what to leave alone (errors, privacy facts, config keys), and the ways a cheap automated pass makes true statements false or invents facts. Read it before delegating a sweep to other agents.
+
 ## Running the audit
 
 ```bash
@@ -77,4 +79,5 @@ The rules ban specific defaults, not whole categories. If purple is genuinely th
 | `references/visual.md` | Choosing color, type, layout, or imagery |
 | `references/copy.md` | Writing any user-facing text, including microcopy |
 | `references/craft.md` | Building components, or checking accessibility and states |
+| `references/cleanup-pass.md` | Stripping slop from existing work, or delegating a sweep |
 | `references/audit-checklist.md` | Reviewing finished work |

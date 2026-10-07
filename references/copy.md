@@ -77,6 +77,10 @@ reimagine, nuanced, multifaceted, intricate, pivotal, beacon, comprehensive,
 crucial, enhance, vibrant, captivating, interplay, kaleidoscope, symphony,
 treasure trove.
 
+Minimisers: "simply", and "just" used to shrink a step ("just connect your
+account"). Welcome headings ("Welcome to Noma" over the home view) are filler;
+name the thing instead.
+
 Phrases: it's worth noting, it's no secret that, gone are the days, sheds light
 on, navigating the complexities of, aligns with, in today's digital age.
 
@@ -174,6 +178,8 @@ a page explaining itself to somebody who is already looking at it.
 - **Three sentences in an empty state where one works.**
 - **A closing paragraph that summarizes the section directly above it.**
 
+Worked before/after cases for all of the above are in `cleanup-pass.md`.
+
 ### The deletion test
 
 Read the page with every paragraph removed that is not a heading, a label, or a
@@ -234,7 +240,11 @@ a bare "Learn more" with no object.
 Errors say what went wrong and what to do about it: "That email is already
 registered. Sign in instead?" not "An error occurred."
 
-Empty states explain what belongs there and how to put it there.
+Empty states explain what belongs there and how to put it there, in one line.
+No stock phrase repeated across states ("Keep working normally." in six of
+them is a tell), no title that restates the heading above it, and no title at
+all when the hint is enough. "A workflow appears here once Noma sees one
+repeat." beats a title plus a hint saying the same.
 
 Loading states name what is loading when it will take more than a moment.
 
