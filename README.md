@@ -26,10 +26,53 @@ and on work that has no design system at all.
 | `references/audit-checklist.md` | The gate. Two failures means the work goes back. |
 | `scripts/audit.py` | The mechanical half of the audit. No dependencies. |
 
-## Using it
+## Install
 
-Point an agent at `SKILL.md`, or package the folder as a `.skill` file and
-install it.
+The skill is the folder: `SKILL.md`, `references/`, and `scripts/`.
+
+### Claude Code
+
+Personal install, available in every project:
+
+```bash
+git clone https://github.com/Ethan-Ka/no-slop-design.git
+mkdir -p ~/.claude/skills/no-slop-design
+rsync -a no-slop-design/SKILL.md no-slop-design/references no-slop-design/scripts \
+  ~/.claude/skills/no-slop-design/
+```
+
+Per-project install: copy the same three items into
+`<your-project>/.claude/skills/no-slop-design/` instead.
+
+Restart Claude Code, or start a new session. The skill loads on its own when you
+ask for UI or copy work, and you can call it directly with `/no-slop-design`.
+
+### Updating
+
+Pull, then run the same `rsync` again. `--delete` is worth adding so files
+removed from the repo are removed from the install:
+
+```bash
+cd no-slop-design && git pull
+rsync -a --delete SKILL.md references scripts ~/.claude/skills/no-slop-design/
+```
+
+### Claude.ai and other agents
+
+Zip the folder contents as `no-slop-design.skill` (a zip with `SKILL.md` at the
+top level) and upload it under Settings, Capabilities, Skills. For agents
+without skill support, point them at `SKILL.md`.
+
+### Check it worked
+
+In Claude Code, ask "what skills do you have?" and look for `no-slop-design`, or
+run the audit directly:
+
+```bash
+python3 ~/.claude/skills/no-slop-design/scripts/audit.py path/to/src
+```
+
+## Using it
 
 The load-bearing part is the four decisions in `SKILL.md`: where the palette
 comes from, which two typefaces and why, what the content actually demands, and
