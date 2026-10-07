@@ -34,7 +34,10 @@ Components that display data add two more: **empty** and **partial**.
 
 Three variants, no more: primary (filled), secondary (bordered), quiet (text
 only). If a fourth is needed, the page is doing too much. One primary per view;
-two primaries means neither is primary. Minimum hit target 44 by 44 CSS pixels,
+two primaries means neither is primary. The hero version of this failure has a
+name: twin buttons, "Get started" beside "Learn more", same size, same weight,
+same visual pull, so the page declines to say what it wants you to do. Pick the
+one action and let the other be a text link. Minimum hit target 44 by 44 CSS pixels,
 icon-only buttons included, and icon-only buttons need an accessible name.
 Label with a verb phrase naming the outcome.
 
@@ -87,6 +90,31 @@ Toasts and inline messages announce politely to assistive technology. They do
 not vanish on a timer if the user needs to act on them. Errors are never
 communicated by color alone.
 
+### Motion that was never watched
+
+Most tells are an absence of taste. These are an absence of looking, which is
+worse, because anyone who ran the page for four seconds would have caught them.
+
+**The wobbling spinner.** A loading ring that does not turn about its own
+centre, so the arc traces a small circle as it spins. It happens when a rotate
+keyframe replaces a `transform` that was also doing the centering
+`translate(-50%, -50%)`, or when the arc is not centred in its own viewBox, or
+when `transform-origin` was moved. Centre the artwork in its box, position with
+a wrapper rather than inside the animated transform, and watch one full
+revolution before you move on. It lands at the worst possible moment, when the
+user has nothing to do but stare at it, and a limping spinner reads as broken.
+
+**Dead states.** A button that does nothing on hover, snaps with no transition
+on press, and shows no focus ring. The inverse of the springy hover, and just
+as much a sign that nobody ran it.
+
+**One fade-in on everything.** A single scroll-triggered animation applied
+globally, so the page reveals itself in one undifferentiated wave.
+
+Watch what you built. Hover it, tab through it, press the buttons, let the
+loading state run. A model does not render its own output, so this is the class
+of defect that only exists in generated work.
+
 ---
 
 ## Accessibility baseline
@@ -132,6 +160,64 @@ calling it done, also:
 
 An automated pass alone is not verification. Say which of these you actually
 did and which you did not.
+
+---
+
+## Reaching for real tools
+
+Two failures sit at opposite ends, and this skill is only about one of them.
+Shipping a framework's factory settings is the default failure. Hand-rolling
+something a mature library already does correctly is the other, and generated
+work does it constantly: a spinner that wobbles, a dropdown with no focus trap
+and no `aria-activedescendant`, a bar chart built from divs with a hardcoded
+max, a hand-drawn SVG icon with two dots for eyes, an easing curve invented on
+the spot. That is not craft. It is a worse version of solved work, missing the
+accessibility and the edge cases the library spent years on.
+
+So reach for the good tools when the work calls for them. Where the surface
+should feel considered rather than merely functional, the difference is usually
+that somebody used a real library and then made decisions on top of it.
+
+**Components and primitives.** [shadcn/ui](https://ui.shadcn.com/) is the
+strong default: Radix primitives underneath, which means the focus management,
+keyboard behavior, and ARIA are already right, and the styles land in your repo
+as code you own rather than as a dependency you fight. Radix UI, React Aria, or
+Base UI directly are equally good when you want to bring your own styling
+layer.
+
+**Motion.** [Motion](https://motion.dev/examples) for anything past a CSS
+transition: layout animation, shared-element transitions, gesture-driven
+movement, orchestrated sequences, spring physics for things that genuinely move
+through space. Its examples page is the fastest way to see what a state change
+should look like when it is doing a job.
+
+**Data.** [D3](https://d3js.org/) when the chart has a form no chart library
+ships: a custom scale, a force layout, an arbitrary projection, an annotation
+layer that has to sit exactly there. Observable Plot or Vega-Lite for the
+ordinary cases, where reaching for raw D3 is over-engineering. Visx if you want
+D3's math with React's rendering.
+
+**The catch, and it is the whole point.** A library is a starting point you
+decide on top of, never the decision itself. shadcn shipped with its default
+tokens, default radius, default Inter, and the default `zinc` neutral is
+precisely the generated look this skill exists to stop; it is one of the most
+recognizable surfaces on the web right now. The same components with your
+palette, your radius, your type scale, and your spacing are the opposite. So
+when you install one of these:
+
+- Replace the token file first, before you build a single screen. Palette,
+  radius, type scale, spacing. If you skipped this, you shipped the default.
+- Delete the variants you are not using, rather than keeping all of them
+  because they came in the box.
+- Keep the accessibility behavior exactly as it came. That is what you came
+  for.
+- Be able to say what the library is doing for this project in one sentence,
+  the same test the typeface has to pass.
+
+The rule is not "avoid popular tools". It is "do not let a tool make the
+decisions that were yours to make". Using D3 to draw exactly the chart the data
+needs is a decision. Using a library's demo palette because it was already
+there is not.
 
 ---
 

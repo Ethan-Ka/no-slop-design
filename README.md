@@ -19,9 +19,9 @@ and on work that has no design system at all.
 | Path | What it is |
 |---|---|
 | `SKILL.md` | The skill itself. Four decisions to make before building, the rules in brief, how to audit. |
-| `references/visual.md` | Color, type, layout, and imagery, with the reason behind each rule |
+| `references/visual.md` | Color, type, layout, decoration, and imagery, with the reason behind each rule |
 | `references/copy.md` | The em dash rule, banned vocabulary, headline patterns, microcopy |
-| `references/craft.md` | The seven states, component rules, WCAG 2.2 AA baseline |
+| `references/craft.md` | The seven states, component rules, motion nobody watched, when to reach for a real library, WCAG 2.2 AA baseline |
 | `references/audit-checklist.md` | The gate. Two failures means the work goes back. |
 | `scripts/audit.py` | The mechanical half of the audit. No dependencies. |
 
@@ -45,11 +45,18 @@ python3 scripts/audit.py index.html --json
 Python 3.8 and up, no dependencies. Exit code 1 when anything hard fails.
 
 It catches the mechanical tells: em dashes and spaced en dashes, banned
-vocabulary, banned headline patterns and structures, AI-default hues computed
-from hex values, purple and cyan gradients, glassmorphism, colored glows,
-colored left borders, emoji standing in for icons, `outline: none` with no
-replacement, images without alt text, placeholder testimonial names,
-round-number stat banners.
+vocabulary, banned headline patterns and structures, explanatory filler,
+eyebrow labels with their chrome and the one-per-three-sections budget, the dot
+family (pulsing status dots, middle-dot separator runs, dot-grid backgrounds,
+traffic-light dots on fake browser chrome, a dot on every row), badge and
+version-pill spam, decorative micro-text, AI-default hues computed from hex
+values, purple and cyan gradients, glassmorphism, colored glows, colored left
+borders, emoji standing in for icons, `outline: none` with no replacement,
+images without alt text, placeholder testimonial and company names,
+round-number stat banners and fake precision, chatbot residue, unsolicited
+reassurance, gradient-clipped headline text, the one-hue status box, the
+framework's stock semantic palette, oversized drop shadows, and spinners likely
+to wobble.
 
 It cannot see whether the layout is symmetric, whether the copy is specific, or
 whether empty and error states exist. Those live in

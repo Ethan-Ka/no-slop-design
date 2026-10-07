@@ -69,9 +69,24 @@ world-class, industry-leading, state-of-the-art, next-generation, holistic,
 synergy, curated, bespoke, meticulous, supercharge, effortlessly, testament to,
 at the end of the day, in today's fast-paced world, more than ever before.
 
+Also: utilize (use "use"), facilitate, foster, streamline, synergize,
+frictionless, bleeding-edge, disruptive, paradigm shift, thought leader,
+ever-evolving, move the needle, circle back, low-hanging fruit, deep dive,
+showcase, unveil, garner, boast, underscore, myriad, plethora, nestled,
+reimagine, nuanced, multifaceted, intricate, pivotal, beacon, comprehensive,
+crucial, enhance, vibrant, captivating, interplay, kaleidoscope, symphony,
+treasure trove.
+
+Phrases: it's worth noting, it's no secret that, gone are the days, sheds light
+on, navigating the complexities of, aligns with, in today's digital age.
+
+Connective tissue that models over-produce and people rarely write: moreover,
+furthermore, additionally, notably. One per document at the outside.
+
 Figurative only, fine in their literal senses: leverage (as a verb), navigate,
 landscape, journey (for anything that is not travel), ecosystem (for a product
-line).
+line), quiet (as in "a quiet confidence", which is the current vogue
+intensifier).
 
 ---
 
@@ -85,6 +100,25 @@ line).
 - Stacked hedging: "may potentially help to improve."
 - Bulleted lists where every bullet is exactly one line and opens with a bolded
   two-word label.
+- "Not only X, but also Y." The same symmetry habit as the negative parallel.
+- **The colon reveal.** A short setup, a colon, and a payoff phrase, used as
+  the rhythm of every other sentence. "The result: fewer meetings."
+- **The fake-profound closer.** A final short line reaching for weight that the
+  piece did not earn. "Because the best tools disappear." End on the concrete
+  line instead.
+- **The sign-off.** "Let's dive in." "Ready to get started?" "The future is
+  bright."
+- **Unsolicited reassurance.** "You're not alone." "You're not imagining it."
+  "You're not broken." Therapy-speak the model injects where nobody asked for
+  comfort.
+- **Chatbot residue.** "As an AI language model", "I hope this helps", "Let me
+  know if you need anything else", "Based on the information provided", "Here's
+  a draft". This is not a style tell, it is direct evidence of paste, so it is
+  the first thing to grep for.
+- **Title Case On Every Heading**, where the house style is sentence case, or a
+  document that switches between the two.
+- **The triad.** Three punchy fragments in a row: "Fast. Beautiful. Yours."
+  Also its longer form, three parallel clauses of near-identical length.
 
 ---
 
@@ -94,8 +128,19 @@ Placeholder testimonial names: Sarah Johnson, John Smith, Michael Chen, Emily
 Rodriguez, Alex Thompson, Jane Doe. If the testimonial is not real, do not ship
 a testimonials section at all.
 
-Round-number metrics nobody measured. Superlatives with no comparison and no
-source ("the fastest", "the most powerful").
+Placeholder company names: Acme, Nexus, Vertex, Lumina, Cloudly, SmartFlow,
+Stellar, Zenith. A logo wall of invented customers is worse than no logo wall.
+
+Round-number metrics nobody measured. Fake precision is the same failure with a
+decimal point on it: 99.99% uptime and 3.2x faster on a product with no
+telemetry are inventions, and the extra digit is what makes them read as
+generated. Superlatives with no comparison and no source ("the fastest", "the
+most powerful").
+
+Decorative micro-text: scroll cues, version pills, locale and weather strips,
+manufactured scarcity counters, fake archival photo credits. These are copy by
+character count and decoration by function, so the full list lives with the
+other ornament in the Decoration section of `references/visual.md`.
 
 ---
 

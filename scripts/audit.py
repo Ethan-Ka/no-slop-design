@@ -2,9 +2,12 @@
 """Automated pass of the anti-slop audit.
 
 Catches the mechanical tells: em dashes, banned vocabulary, banned headline
-patterns, explanatory filler, eyebrow labels, AI-default hues, banned
-typefaces, glows, glassmorphism, emoji icons, suppressed focus outlines,
-placeholder testimonial names, round-number stat banners, missing alt text.
+patterns, explanatory filler, eyebrow labels and their chrome, the eyebrow
+budget, the dot family (status dots, middle-dot separator runs, dot grids,
+traffic-light window dots, dot-on-every-row), badge and version-pill spam,
+decorative micro-text, AI-default hues, banned typefaces, glows, glassmorphism,
+emoji icons, suppressed focus outlines, placeholder names, round-number stat
+banners, missing alt text.
 
 It does not catch the judgment items (is the layout symmetric, is the copy
 specific, do empty and error states exist). Those stay on the human checklist
@@ -40,6 +43,22 @@ BANNED_WORDS = [
     "synergy", "curated", "bespoke", "meticulous", "testament to",
     "at the end of the day", "in today's fast-paced world",
     "more than ever before", "supercharge", "effortlessly",
+    "utilize", "facilitate", "foster", "streamline", "synergize",
+    "frictionless", "bleeding-edge", "disruptive", "paradigm shift",
+    "thought leader", "ever-evolving", "move the needle", "circle back",
+    "low-hanging fruit", "deep dive", "showcase", "unveil", "garner",
+    "boast", "underscore", "myriad", "plethora", "nestled", "reimagine",
+    "nuanced", "multifaceted", "intricate", "pivotal", "beacon",
+    "it's worth noting", "it is worth noting", "it's no secret that",
+    "gone are the days", "sheds light on", "navigating the complexities of",
+    "aligns with", "in today's digital age",
+]
+# Model-overproduced connectives and study-flagged words. Common enough in
+# ordinary writing that they report as warnings, not failures.
+SOFT_WORDS_EXTRA = [
+    "moreover", "furthermore", "additionally", "notably", "comprehensive",
+    "crucial", "enhance", "vibrant", "captivating", "interplay", "symphony",
+    "treasure trove", "kaleidoscope",
 ]
 # These are only tells in figurative use, so they are reported separately as
 # soft hits rather than hard failures.
@@ -58,6 +77,15 @@ BANNED_PATTERNS = [
     (r"\bpowered by ai\b", "'Powered by AI' as the value proposition"),
     (r"\bmay potentially\b|\bcould possibly help to\b", "stacked hedging"),
     (r"\btake your .{2,30} to the next level\b", "cliche: 'to the next level'"),
+    (r"\bnot only .{2,40}[,]? but also\b", "structure: 'Not only X but also Y'"),
+    (r"\byou'?re not (alone|imagining it|broken|crazy)\b",
+     "structure: unsolicited reassurance"),
+    (r"\bas an ai language model\b|\bi hope this helps\b|"
+     r"\blet me know if you need anything else\b|"
+     r"\bbased on the information provided\b|\bhere'?s a draft\b",
+     "chatbot residue: direct evidence of paste"),
+    (r"\blet'?s dive in\b|\bready to get started\?|\bthe future is bright\b",
+     "structure: sign-off"),
 ]
 
 # Text where the interface explains itself to somebody already looking at it.
@@ -94,7 +122,101 @@ EYEBROW_CLASS = re.compile(
 EYEBROW_MARKUP = re.compile(
     r"<(p|span|div)\b[^>]*>\s*([A-Z][A-Z0-9 &/'\-]{2,28})\s*</\1>\s*<h[1-3]\b")
 
-BANNED_FONTS = ["Inter", "Space Grotesk", "Roboto"]
+MONO_CAPS = re.compile(
+    r"(?=.*(?:font-mono|monospace|\bmono\b))(?=.*uppercase)", re.I)
+
+# Eyebrow chrome and the newer eyebrow variants.
+EYEBROW_NUMBER = re.compile(
+    r"^\s*(?:0\d\d?|\d{1,2})\s*[/·•]\s*[A-Za-z]{3,}", re.M)
+POETIC_LABELS = [
+    "field notes", "from the field", "loose plates", "selected work",
+    "the archive", "in the wild", "notes from", "quietly trusted by",
+    "quietly in use at",
+]
+
+# The dot family. Each entry is (regex, label, severity).
+# Structural guesses for the most part, so most report as warnings and need
+# eyes on the rendered page.
+DOT_PATTERNS = [
+    (r"animate-pulse[^\"\']*rounded-full|rounded-full[^\"\']*animate-pulse",
+     "dot: pulsing status dot", "fail"),
+    (r"\b(status|live|pulse|online|availability)[-_]?dot\b",
+     "dot: status dot element", "warn"),
+    (r"rounded-full[^\"\']*\bbg-(green|emerald|lime)-\d00\b|"
+     r"\bbg-(green|emerald|lime)-\d00[^\"\']*rounded-full",
+     "dot: green status dot", "warn"),
+    (r"box-shadow[^;]*0\s+0\s+0\s+\d+px\s+rgba?\([^)]*\)[^;]*;?\s*.{0,40}border-radius\s*:\s*(50%|9999px|999px)",
+     "dot: haloed status dot", "warn"),
+    (r"radial-gradient\([^)]*circle[^)]*\)[^;]*;?[^}]{0,120}background-size|"
+     r"bg-\[radial-gradient\([^\]]*circle",
+     "dot: dot-grid background", "warn"),
+    (r"#ff5f56|#ffbd2e|#27c9?3f|#28c840|#febc2e|#ff5f57",
+     "dot: macOS traffic-light dots on fake browser chrome", "fail"),
+    (r"\bcarousel-dots?\b|\bslider-dots?\b|\bdot-nav\b",
+     "dot: carousel dots", "warn"),
+]
+
+# Decoration that is text by character count and ornament by function.
+DECOR_TEXT = [
+    (r"\bscroll to explore\b|\bscroll down\b|>\s*↓?\s*scroll\s*<",
+     "decoration: scroll cue", "fail"),
+    (r"\b(invite[- ]only preview|early access|coming soon)\b",
+     "decoration: version or status pill", "warn"),
+    (r">\s*(BETA|ALPHA|V\d+(\.\d+)*|v\d+\.\d+)\s*<",
+     "decoration: version pill", "warn"),
+    (r"\b\d{1,3} (spots?|seats?|slots?|places?) (left|remaining|open)\b|"
+     r"\breservation \d+ of \d+\b|\bonly \d+ (spots?|seats?) \b",
+     "decoration: manufactured scarcity", "fail"),
+    (r"\d{1,2}:\d{2}\s*[·•]\s*-?\d{1,2}\s*°",
+     "decoration: locale / time / weather strip", "fail"),
+    (r"\b(plate|frame|field study|study) (no\.? ?)?\s*[IVX0-9]{1,4}\s*[·•]",
+     "decoration: fake archival photo credit", "warn"),
+    (r"\b(new|hot|popular|pro|beta)\b\s*(badge|pill|chip)\b|"
+     r"(badge|pill|chip)[^\"\']*>\s*(✨|🔥|⚡)\s*(New|Hot|Popular)",
+     "decoration: badge spam", "warn"),
+]
+
+# Surface and type failures that show up as recognizable code shapes.
+SURFACE_PATTERNS = [
+    (r"\bbg-(red|amber|yellow|green|blue|indigo)-\d00/\d{1,2}\b",
+     "one-hue status box: same hue as border, text, and tint", "check-hue"),
+    (r"(box-shadow|drop-shadow)\s*:[^;]*\b(4\d|[5-9]\d|\d{3,})px\b|"
+     r"shadow-\[[^\]]*\b(4\d|[5-9]\d|\d{3,})px",
+     "oversized drop shadow: blur 40px or wider", "warn"),
+    (r"overflow-hidden[^\"\']*rounded-|rounded-[^\"\']*overflow-hidden",
+     "border may die at the corner: radius on a clipping wrapper", "warn"),
+    (r"bg-clip-text|background-clip\s*:\s*text|"
+     r"-webkit-text-fill-color\s*:\s*transparent",
+     "gradient headline text", "fail"),
+    (r"repeating-linear-gradient", "gradient used as texture", "warn"),
+    (r"letter-spacing\s*:\s*-0\.0[3-9]|tracking-tighter",
+     "tracking crushed past the face", "warn"),
+    (r"<(mark|u|s)\b(?![^>]*\bhref)", "drawing on the words for emphasis", "warn"),
+    (r"transform-origin\s*:\s*(?!center|50%)",
+     "spinner may wobble: transform-origin moved off centre", "warn"),
+    (r"animate-spin[^\"\']*translate-|translate-[^\"\']*animate-spin",
+     "spinner may wobble: centering inside the animated transform", "warn"),
+    (r"font-family[^;]*\b(Playfair|Lora|Cormorant|Fraunces|Instrument Serif)\b",
+     "display serif used where a text face belongs", "warn"),
+    (r"\bgood (morning|afternoon|evening),?\s*\{",
+     "editorial dashboard: a greeting used as an app headline", "warn"),
+]
+
+# Tailwind's stock semantic set, only a tell when several appear together.
+SEMANTIC_SET = re.compile(r"\bbg-(blue|amber|yellow|green|red)-50\b")
+
+PLACEHOLDER_BRANDS = [
+    "Acme", "Acme Corp", "Nexus", "Vertex", "Lumina", "Cloudly",
+    "SmartFlow", "Zenith Labs", "Globex", "Initech",
+]
+
+FAKE_PRECISION = [
+    (r"\b99\.9[89]\s?%", "fake precision: 99.99%"),
+    (r"\b\d\.\dx (faster|better|more|cheaper)\b", "fake precision: N.Nx faster"),
+]
+
+BANNED_FONTS = ["Inter", "Space Grotesk", "Roboto", "Geist", "Manrope",
+                "Plus Jakarta Sans"]
 
 PLACEHOLDER_NAMES = [
     "Sarah Johnson", "John Smith", "Michael Chen", "Emily Rodriguez",
@@ -176,6 +298,9 @@ def scan(path, approved=None):
         for w in SOFT_WORDS:
             if re.search(r"\b" + re.escape(w) + r"(s|d|ing)?\b", low):
                 add(i, "copy", "check figurative use: " + w, line, "warn")
+        for w in SOFT_WORDS_EXTRA:
+            if re.search(r"\b" + re.escape(w) + r"\b", low):
+                add(i, "copy", "model-overproduced word: " + w, line, "warn")
 
         for rx, label in BANNED_PATTERNS:
             if re.search(rx, low):
@@ -186,8 +311,60 @@ def scan(path, approved=None):
 
         if EYEBROW_CLASS.search(line):
             add(i, "type", "eyebrow / kicker element", line, "warn")
+            if MONO_CAPS.search(line):
+                add(i, "type", "monospace all-caps eyebrow", line)
+            if "·" in line or "•" in line or "&middot;" in low:
+                add(i, "type", "eyebrow chrome: leading or separating dot", line)
         if "uppercase" in low and ("letter-spacing" in low or "tracking-" in low):
             add(i, "type", "eyebrow recipe: uppercase plus letter-spacing", line, "warn")
+        if EYEBROW_NUMBER.search(re.sub(r"<[^>]+>", "", line)):
+            add(i, "type", "section-number eyebrow: '01 / Capabilities'", line, "warn")
+        for label in POETIC_LABELS:
+            if label in low:
+                add(i, "type", "poetic section label: " + label, line, "warn")
+
+        # The dot family, plus the ornament that travels with it.
+        dots = line.count("·") + line.count("•") + low.count("&middot;")
+        if dots >= 2:
+            add(i, "decoration",
+                "middle dot as the default separator (%d on one line)" % dots, line)
+        for rx, label, sev in DOT_PATTERNS:
+            if re.search(rx, line, re.I):
+                add(i, "decoration", label, line, sev)
+        for rx, label, sev in DECOR_TEXT:
+            if re.search(rx, line, re.I):
+                add(i, "decoration", label, line, sev)
+
+        for brand in PLACEHOLDER_BRANDS:
+            if re.search(r"\b" + re.escape(brand) + r"\b", line):
+                add(i, "copy", "placeholder company name: " + brand, line)
+        for rx, label in FAKE_PRECISION:
+            if re.search(rx, low):
+                add(i, "copy", label, line, "warn")
+
+        for rx, label, sev in SURFACE_PATTERNS:
+            m = re.search(rx, line, re.I)
+            if not m:
+                continue
+            if sev == "check-hue":
+                # Only a tell when the tint, the text, and the border share a hue.
+                hue = re.search(r"bg-([a-z]+)-\d00/", low)
+                if hue and re.search(r"\btext-" + hue.group(1) + r"-\d00\b", low) \
+                        and re.search(r"\bborder-" + hue.group(1) + r"-\d00\b", low):
+                    add(i, "color", label, line)
+                continue
+            add(i, "color" if "gradient" in label or "hue" in label else "craft",
+                label, line, sev)
+
+        if "border-t" in low and "border-b" in low:
+            add(i, "decoration", "top and bottom border on the same row", line, "warn")
+        if re.search(r"hover:scale-1\d", low) and "transition-all" in low:
+            add(i, "layout", "springy hover: scale plus transition-all", line, "warn")
+        if re.search(r"cursor\s*:\s*url\(", low):
+            add(i, "layout", "custom mouse cursor", line, "warn")
+        m = re.search(r"\bbg-([a-z]+)-\d00/\d{1,2}\b", low)
+        if m and re.search(r"\btext-" + m.group(1) + r"-\d00\b", low):
+            add(i, "decoration", "icon tinted in a wash of its own color", line, "warn")
         for rx, label in ROUND_STATS:
             if re.search(rx, line):
                 add(i, "copy", label, line, "warn")
@@ -245,11 +422,55 @@ def scan(path, approved=None):
     # Markup-level: a short all-caps element immediately before a heading.
     # Spans lines, so it runs over the whole document rather than per line.
     doc = "\n".join(lines)
+    eyebrow_lines = []
     for m in EYEBROW_MARKUP.finditer(doc):
         line_no = doc.count("\n", 0, m.start()) + 1
+        eyebrow_lines.append(line_no)
         add(line_no, "type",
             "eyebrow label above a heading: " + m.group(2).strip(),
             lines[line_no - 1] if line_no <= len(lines) else "", "warn")
+
+    # The eyebrow budget: at most one per three sections. A page with an
+    # eyebrow on every section has, in effect, none.
+    seen = set(eyebrow_lines)
+    for m in EYEBROW_CLASS.finditer(doc):
+        seen.add(doc.count("\n", 0, m.start()) + 1)
+    eyebrows = len(seen)
+    sections = len(re.findall(r"<section\b", doc, re.I)) or len(
+        re.findall(r"<h2\b", doc, re.I))
+    if sections >= 3 and eyebrows > -(-sections // 3):
+        add(eyebrow_lines[0] if eyebrow_lines else 1, "type",
+            "eyebrow budget: %d eyebrows across %d sections (cap is %d)"
+            % (eyebrows, sections, -(-sections // 3)), "", "warn")
+
+    # Three or more of the stock -50 semantic backgrounds together is the
+    # framework's factory palette, which nobody picked.
+    stock = set(SEMANTIC_SET.findall(doc))
+    if len(stock) >= 3:
+        add(1, "color",
+            "framework's stock semantic palette: " + ", ".join(sorted(stock)),
+            "", "warn")
+
+    # A colored dot repeated down every row is confetti, not a signal.
+    empty_dots = re.findall(
+        r"<(?:span|div|i)\b[^>]*rounded-full[^>]*>\s*</(?:span|div|i)>", doc)
+    if len(empty_dots) >= 3:
+        add(1, "decoration",
+            "a decorative dot on every row (%d empty round elements)"
+            % len(empty_dots), "", "warn")
+
+    # Three round elements carrying red, amber, and green within a short span
+    # is a fake browser title bar.
+    for m in re.finditer(r"rounded-full", doc):
+        window = doc[m.start():m.start() + 320].lower()
+        if (re.search(r"bg-red-\d00", window)
+                and re.search(r"bg-(yellow|amber)-\d00", window)
+                and re.search(r"bg-green-\d00", window)):
+            line_no = doc.count("\n", 0, m.start()) + 1
+            add(line_no, "decoration",
+                "traffic-light dots on fake browser chrome",
+                lines[line_no - 1] if line_no <= len(lines) else "")
+            break
 
     return hits
 
